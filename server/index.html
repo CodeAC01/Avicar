@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Avicar PoC</title>
+
+    <link rel="stylesheet" href="nostalgic-80s.css">
+    <script src="js/vendor/jquery.js"></script>
+    <script src="js/vendor/motion-ui.js"></script>
+    <script src="js/foundation.min.js"></script>
+    <script src="js/adapter.js"></script>
+    <script src="js/script.js"></script>
+    <script src="signalling.js"></script>
+    <script src="main.js"></script>
+    
+
+</head>
+
+<body data-gr-c-s-loaded="true">
+    <div class="grid-container">
+        <div class="grid-x grid-margin-x">
+            <div class="cell">
+                <p>Race your RC Buggy!!!</p>
+            </div>
+            <div class="cell">
+                <div>
+                    <!--
+                    <button id="start" title="If you do not see any video stream, make sure your browser supports the codec used within this demo (see the source code for details, or try Firefox or Chrome)">Start Streaming</button>
+                    -->
+                    <span data-toggler data-animate="fade-in fade-out" class='start-btn' id='start'>START YOUR ENGINES!</span>
+                    <span class='stop-btn' id='stop'>STOP</span>
+                </div>
+    
+            </div>
+
+            <div class="cell">
+                <video id="v"></video>
+                <canvas id="c" width="640" height="480"></canvas>
+            </div>
+
+        
+            <div class="cell">
+
+                <div>
+                    <span class='video-game-button'>&#8593</span>
+                </div>
+                <div>
+                    <span class='video-game-button'>&#8592</span>
+                    <span class='video-game-button'>&#8594</span>  
+                </div>
+                <div>
+                    <span class='video-game-button'>&#8595</span>
+                </div>
+
+            </div> 
+            
+    
+                <div id=''>
+                    <label id="server" style="display:none">Web Service URL
+                    <input required="" type="text" id="address" value="" title="hostname (or IP address) and port of the UV4L WebRTC Web Service">
+                </label>
+            </div>
+                
+        </div>
+    </div>
+    <script>
+        // Let's get a default address for the signalling server
+        var address = document.getElementById('address').value;
+        if (!address || address === '') {
+            var hostname = location.hostname;
+            if (hostname) {
+                address = hostname + ':' + (location.port || (location.protocol === 'https:' ? 443 : 80)) + '/webrtc';
+                document.getElementById('address').value = address;
+            } else {
+                document.getElementById('address').value = "raspberrypi.local/webrtc";
+                // "<host>:<port>/webrtc";
+            }
+        }
+
+        document.onload
+    </script>
+
+    
+    <script src="js/vendor/jquery.js"></script>
+    <script src="js/vendor/motion-ui.js"></script>
+    <script src="js/foundation.min.js"></script>
+    <script src="js/adapter.js"></script>
+    <script src="js/script.js"></script>
+    
+
+</body>
+
+</html>

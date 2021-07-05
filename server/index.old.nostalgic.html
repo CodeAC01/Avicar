@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <title>AVICAR PoC</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @font-face {
+        font-family: 'Press Start 2p';
+        src: url('PressStart2P.ttf');
+        }
+        body {
+        background-color: black;
+        font-size: 30pt;
+        font-family: 'Press Start 2p';
+        color: white;
+        text-align: center;
+        }
+        #server {
+            display: block;
+            margin: 0% auto 2%;
+        }
+
+        button {
+            border: none;
+            display: block;
+            padding: 0.5em 1em;
+            margin: 1% auto 0;
+            cursor: pointer;
+            color: #fff;
+            background-color: #00cf0a;
+        }
+
+        button:active {
+            background-color: #e44d26;
+        }
+
+        #start {
+            display: inline-block;
+            margin: 0% auto 2%;
+        }
+
+        #stop {
+            display: inline-block;
+            margin: 0% auto 2%;
+        }
+
+        video {
+            position: absolute;
+            /*visibility: hidden;*/
+        }
+
+        canvas {
+            border: 8px solid #fff;
+        }
+        .video-game-button {
+            text-shadow: 1px 1px pink, -1px -1px maroon;
+
+            line-height: 1.5em;
+            text-align: center;
+            display: inline-block;
+            width: 1.5em;
+            -webkit-border-radius: .75em;
+            -moz-border-radius: .75em;
+            -o-border-radius: .75em;
+                border-radius: .75em;
+            background-color: red;
+            -webkit-box-shadow:  0 .2em maroon;
+            -moz-box-shadow:  0 .2em maroon;
+            -o-box-shadow:  0 .2em maroon;
+            box-shadow:  0 .2em maroon;
+            color: red;
+            margin: 5px;
+            background-color: red;
+            background-image: -o-linear-gradient(left top, pink 3%, red 22%, maroon 99%);
+            background-image: -moz-linear-gradient(left top, pink 3%, red 22%, maroon 99%);
+            background-image: -webkit-linear-gradient(left top, pink 3%, red 22%, maroon 99%);
+            background-image: linear-gradient(left top, pink 3%, red 22%, maroon 99%);
+            cursor: pointer;
+        padding-left: 5px;
+        }
+        .start-btn{
+            text-align: center;
+            display: inline-block;
+            margin:5px;
+            font-weight: bold;
+            padding: 10px 0 10px 10px ;
+            background-color: rgb(48, 240, 10);
+            text-shadow: -1px -1px black, 1px 1px white;
+            color: gray;
+            -webkit-border-radius: 7px;
+            -moz-border-radius: 7px;
+            -o-border-radius: 7px;
+            border-radius: 7px;
+            box-shadow: 0 .2em gray; 
+            cursor: pointer;
+
+        }
+        .stop-btn{
+            text-align: center;
+            display: inline-block;
+            margin:5px;
+            font-weight: bold;
+            padding: 10px 0 10px 10px ;
+            background-color: rgb(219, 6, 6);
+            text-shadow: -1px -1px black, 1px 1px white;
+            color: gray;
+            -webkit-border-radius: 7px;
+            -moz-border-radius: 7px;
+            -o-border-radius: 7px;
+            border-radius: 7px;
+            box-shadow: 0 .2em gray; 
+            cursor: pointer;
+
+        }
+        .video-game-button:active, .start-btn:active {
+            /*box-shadow: none;*/
+            position: relative;
+            top: .2em;
+        }
+        
+
+    
+    </style>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="./signalling.js"></script>
+    <!-- Load TensorFlow.js -->
+    <script src="https://unpkg.com/@tensorflow/tfjs"></script>
+    <!-- Load Posenet -->
+    <script src="https://unpkg.com/@tensorflow-models/posenet"></script>
+    <!-- <script async="" src="https://192.168.11.9:80/cv.js"></script> -->
+    <script src="./detection.js"></script>
+    <script src="./main.js"></script>
+    <script type="text/javascript">
+        var Module = {
+            preRun: [],
+            postRun: [],
+            print: (function () {
+                return function (text) {
+                    text = Array.prototype.slice.call(arguments).join(' ');
+                    console.log(text);
+                };
+            })(),
+            printErr: function (text) {
+                text = Array.prototype.slice.call(arguments).join(' ');
+                console.error(text);
+            }
+        };
+    </script>
+
+</head>
+
+<body data-gr-c-s-loaded="true">
+    <p>Race your RC Buggy!!!</p>
+    
+    <div>
+        <!--
+        <button id="start" title="If you do not see any video stream, make sure your browser supports the codec used within this demo (see the source code for details, or try Firefox or Chrome)">Start Streaming</button>
+        -->
+        <span class='start-btn' id='start'>START YOUR ENGINES!</span>
+        <span class='stop-btn' id='stop'>STOP</span>
+    </div>
+
+    <video id="v"></video>
+    <canvas id="c" width="640" height="480"></canvas>
+
+    <div>
+        
+        <div class=controller>
+          <div class=centerBlue>
+            <div class=centerLeft></div>   
+            <div class=centerRight></div>  
+          </div>
+          <div class=centerStart>
+            <div class=SLeft></div>
+            <div class=SRight></div>
+          </div>
+          <div class=centerSelect>
+            <div class=SLeft></div>
+            <div class=SRight></div>
+          </div>
+         
+          <div class=controllerLeft>
+            <div class=circle></div>
+            <div class=crossCenter>
+              <div class=crossTop></div>
+              <div class=crossBottom></div>
+              <div class=crossLeft></div>
+              <div class=crossRight></div>
+              <div class=crossCircle></div>
+            </div>
+          </div>
+          <div class=controllerRight>
+            <div class=backButton1Center>
+              <div class= cornerLeft1></div>
+              <div class= cornerRight1></div>
+            </div>
+            <div class=backButton2Center>
+              <div class= cornerLeft2></div>
+              <div class= cornerRight2></div>
+            </div>
+          </div>
+        </div> 
+    </div>
+    <div>
+        <span class='video-game-button'>&#8593</span>
+    </div>
+    <div>
+        <span class='video-game-button'>&#8592</span>
+        <span class='video-game-button'>&#8594</span>  
+    </div>
+    <div>
+        <span class='video-game-button'>&#8595</span>
+    </div>
+
+    <div id=''>
+        <label id="server">Web Service URL
+        <input required="" type="text" id="address" value="" title="hostname (or IP address) and port of the UV4L WebRTC Web Service">
+    </label>
+</div>
+    <!--
+    <div>
+        <button id="load_net">Load Net</button>
+        <button id="effect">Toggle Detection</button>
+        <button id="toggleSkeletonButton">Toggle Skeleton</button>
+    </div>
+-->
+    <script>
+        // Let's get a default address for the signalling server
+        var address = document.getElementById('address').value;
+        if (!address || address === '') {
+            var hostname = location.hostname;
+            if (hostname) {
+                address = hostname + ':' + (location.port || (location.protocol === 'https:' ? 443 : 80)) + '/webrtc';
+                document.getElementById('address').value = address;
+            } else {
+                document.getElementById('address').value = "raspberrypi.local/webrtc";
+                // "<host>:<port>/webrtc";
+            }
+        }
+    </script>
+
+</body>
+
+</html>
